@@ -1,4 +1,4 @@
-import ModeSelect from "../ModeSelect/index";
+import ModeSelect from '../ModeSelect';
 import { Box } from "@mui/system";
 
 function AppBar() {
