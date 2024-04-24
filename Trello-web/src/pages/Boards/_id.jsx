@@ -1,8 +1,8 @@
 import { Box } from "@mui/system";
-import Container from '@mui/material/Container';
-import AppBar from '~/components/AppBar';
-import BoardBar from "../Boards/BoardBar";
-import BoardContent from "../Boards/BoardContent";
+import Container from "@mui/material/Container";
+import AppBar from "~/components/AppBar/AppBar";
+import BoardBar from "./BoardBar/BoardBar";
+import BoardContent from "~/pages/Boards/BoardContent/index";
 
 function Board() {
   return (

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ModeSelect from "../ModeSelect";
+import ModeSelect from "../ModeSelect/ModeSelect";
 import { Box } from "@mui/system";
 import AppsIcon from "@mui/icons-material/Apps";
 import SvgIcon from "@mui/material/SvgIcon";
