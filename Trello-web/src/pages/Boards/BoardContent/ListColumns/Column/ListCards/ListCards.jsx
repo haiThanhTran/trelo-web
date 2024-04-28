@@ -11,7 +11,7 @@ import { Box } from "@mui/system";
 import React, { useState } from "react";
 import Trello_Card from "./Card/Card";
 
-function ListCards() {
+function ListCards({ cards }) {
   return (
     <Box
       sx={{
@@ -27,7 +27,7 @@ function ListCards() {
         maxHeight: (theme) =>
           `calc(
             ${theme.trello.boardContentHeight} -
-            ${theme.spacing()} - 
+            ${theme.spacing(5)} - 
             ${theme.trello.columnHeaderHeight} - 
             ${theme.trello.columnFooterHeight})`,
 
@@ -38,11 +38,9 @@ function ListCards() {
       }}
     >
       {/* First Card */}
-      <Trello_Card />
-      <Trello_Card temporaryHideMedia />
-      <Trello_Card temporaryHideMedia />
-      <Trello_Card temporaryHideMedia />
-      <Trello_Card temporaryHideMedia />
+      {cards?.map((card) => (
+        <Trello_Card key={card._id} card={card} />
+      ))}
     </Box>
   );
 }

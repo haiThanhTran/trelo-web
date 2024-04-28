@@ -11,7 +11,7 @@ import AvatarGroup from "@mui/material/AvatarGroup";
 import { Tooltip } from "@mui/material";
 import Button from "@mui/material/Button";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
-
+import { capitalizeFirstLetter } from "~/utils/formaters";
 const MenuStyle = {
   color: "white",
   bgcolor: "transparent",
@@ -25,7 +25,8 @@ const MenuStyle = {
     bgcolor: "primary.50",
   },
 };
-function BoardBar() {
+function BoardBar(props) {
+  const board = props.board;
   return (
     <Box
       px={2}
@@ -45,13 +46,13 @@ function BoardBar() {
         <Chip
           sx={MenuStyle}
           icon={<DashboardIcon />}
-          label="haiThanhTran"
+          label={capitalizeFirstLetter(board.title)}
           clickable
         />
         <Chip
           sx={MenuStyle}
           icon={<VpnLockIcon />}
-          label="Public/Private Workspaces"
+          label={capitalizeFirstLetter(board.type)}
           clickable
         />
         <Chip
@@ -97,12 +98,6 @@ function BoardBar() {
             },
           }}
         >
-          <Tooltip title="haiThanhTran">
-            <Avatar
-              alt="haiThanhTran"
-              src="https://scontent.fhan3-5.fna.fbcdn.net/v/t39.30808-1/375289051_958970645161748_1870848238690917828_n.jpg?stp=c0.93.320.320a_dst-jpg_p320x320&_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_ohc=dA9v7AbhaOoAb5F0Bju&_nc_ht=scontent.fhan3-5.fna&oh=00_AfDQTL-Dsu167PUk-3yLPTG_2ajW1jBecVguZDaRLvViVQ&oe=6628481C"
-            />
-          </Tooltip>
 
           <Tooltip title="haiThanhTran">
             <Avatar
