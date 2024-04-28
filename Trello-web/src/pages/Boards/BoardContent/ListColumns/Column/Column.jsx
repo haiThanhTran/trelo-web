@@ -24,9 +24,24 @@ import AttachmentIcon from "@mui/icons-material/Attachment";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
 import ListCards from "./ListCards/ListCards";
+import { mapOrder } from "~/utils/sorts";
 
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
-function Column() {
+function Column({ column }) {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({
+      id: column._id,
+      data: { ...column },
+    });
+
+  const dndKitColumnStyles = {
+    
+    transform: CSS.Translate.toString(transform),
+    transition,
+  };
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -35,9 +50,16 @@ function Column() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const orderedCard = mapOrder(column?.cards, column?.cardOrderIds, "_id");
+
   return (
     // Box 01
     <Box
+      ref={setNodeRef}
+      style={dndKitColumnStyles}
+      {...attributes}
+      {...listeners}
       sx={{
         minWidth: "300px",
         maxWidth: "300px",
@@ -45,7 +67,7 @@ function Column() {
           theme.palette.mode === "dark" ? "#333643" : "#ebecf0",
         ml: 2,
         borderRadius: "6px",
-        height: 'fit-content',
+        height: "fit-content",
         maxHeight: (theme) =>
           ` calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)}) `,
       }}
@@ -68,7 +90,7 @@ function Column() {
             cursor: "pointer",
           }}
         >
-          Column Title
+          {column?.title}
         </Typography>
         <Box>
           <Tooltip title="More options">
@@ -137,7 +159,7 @@ function Column() {
       </Box>
 
       {/* Box List Card */}
-      <ListCards />
+      <ListCards cards={orderedCard} />
 
       {/* FOOTER */}
       <Box
