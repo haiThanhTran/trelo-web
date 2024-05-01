@@ -45,7 +45,7 @@ function Trello_Card({ card }) {
         overflow: "unset",
       }}
     >
-      {card?.cover && <CardMedia sx={{ height: 200 }} image={card?.cover} />}
+      {card?.cover && <CardMedia sx={{ height: 150 }} image={card?.cover} />}
 
       <CardContent sx={{ p: 1.5, "&:last-child": { p: 1.5 } }}>
         <Typography>{card?.title}</Typography>
