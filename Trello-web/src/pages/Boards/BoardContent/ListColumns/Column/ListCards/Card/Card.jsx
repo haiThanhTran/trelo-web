@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import Card from "@mui/material/Card";
+import MuiCard from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -34,15 +34,16 @@ function Trello_Card({ card }) {
     );
   };
   return (
-    <Card
+    <MuiCard
       ref={setNodeRef}
       style={dndKitCardStyles}
       {...attributes}
       {...listeners}
       sx={{
-        cursor: "pointer",
-        boxShadow: "0 1px 1px rgba(0, 0 , 0 , 0.2)",
-        overflow: "unset",
+        cursor: 'pointer',
+        boxShadow: '0 1px 1px rgba(0, 0 , 0 , 0.2)',
+        overflow: 'unset',
+        display:card.FE_PlaceholderCard ? 'none':'block'
       }}
     >
       {card?.cover && <CardMedia sx={{ height: 150 }} image={card?.cover} />}
@@ -72,7 +73,7 @@ function Trello_Card({ card }) {
           )}
         </CardActions>
       )}
-    </Card>
+    </MuiCard>
   );
 }
 
