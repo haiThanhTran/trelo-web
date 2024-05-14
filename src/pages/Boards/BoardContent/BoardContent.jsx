@@ -15,7 +15,7 @@ import {
   rectIntersection,
   getFirstCollision,
 } from "@dnd-kit/core"; // Import DndContext
-import{MouseSensor,TouchSensor} from "~/customLibraries/DndKitSensors"
+import { MouseSensor, TouchSensor } from "~/customLibraries/DndKitSensors";
 import { mapOrder } from "~/utils/sorts";
 import { arrayMove } from "@dnd-kit/sortable";
 import { useEffect, useState, useCallback, useRef } from "react";
@@ -28,7 +28,13 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: "ACTIVE_DRAG_ITEM_TYPE_CARD",
 };
 
-function BoardContent({ board }) {
+function BoardContent({
+  board,
+  createNewColumn,
+  createNewCard,
+  moveColumn,
+  moveCardInSameColumn,
+}) {
   //
   const poiterSensor = useSensor(PointerSensor, {
     activationConstraint: { distance: 10 },
@@ -257,6 +263,7 @@ function BoardContent({ board }) {
           newCardIndex
         );
 
+        const dndOrderedCardIds = dndOrderedCards.map((card) => card._id);
         setOrderedState((prevColumn) => {
           const nextColumns = cloneDeep(prevColumn);
 
@@ -270,6 +277,7 @@ function BoardContent({ board }) {
 
           return nextColumns;
         });
+        moveCardInSameColumn(dndOrderedCards,dndOrderedCardIds,oldColumnWhenDraggingCard._id);
       }
     }
 
@@ -291,10 +299,8 @@ function BoardContent({ board }) {
           oldColumnIndex,
           newColumnIndex
         );
-        // const dndOrderedColumnsIds=dndOrderedColumns.map(c => c._id)
-        // console.log("dndOrderedColumns:",dndOrderedColumns)
-        // console.log("dndOrderedColumnsIds:",dndOrderedColumnsIds)
         setOrderedState(dndOrderedColumns);
+        moveColumn(dndOrderedColumns);
       }
     }
     setActiveDragItemId(null);
@@ -376,7 +382,11 @@ function BoardContent({ board }) {
           p: "10px 0",
         }}
       >
-        <ListColumns columns={orderedColumns} />
+        <ListColumns
+          columns={orderedColumns}
+          createNewColumn={createNewColumn}
+          createNewCard={createNewCard}
+        />
         <DragOverlay dropAnimation={customDropAnimation}>
           {!activeDragItemType && null}
           {activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && (

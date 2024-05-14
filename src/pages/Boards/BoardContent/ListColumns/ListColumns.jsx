@@ -12,21 +12,25 @@ import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import {toast} from 'react-toastify'
-function ListColumns({ columns }) {
+function ListColumns({ columns, createNewColumn,createNewCard }) {
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false);
   const toggleOpenNewColumnForm = () =>
     setOpenNewColumnForm(!openNewColumnForm);
 
   const [newColumnTitle, setNewColumnTitle] = useState("");
-  const addnewColumn = () => {
+  const addnewColumn = async () => {
     if (!newColumnTitle) {
       toast.error("Please enter column title");
       return;
     }
-    console.log(newColumnTitle);
+    //Tạo dữ liệu Column để gọi Api
+    const newColumnData ={
+      title:newColumnTitle
+    }
     //Gọi API ở đây 
+
+    await createNewColumn(newColumnData)
     toggleOpenNewColumnForm()
-    setOpenNewColumnForm()
     setNewColumnTitle('')
   };
   return (
@@ -45,7 +49,7 @@ function ListColumns({ columns }) {
         }}
       >
         {columns?.map((column) => (
-          <Column key={column._id} column={column} />
+          <Column key={column._id} column={column} createNewCard={createNewCard}/>
         ))}
         {/* Box add new column CTA */}
         {!openNewColumnForm ? (
