@@ -34,6 +34,7 @@ function BoardContent({
   createNewCard,
   moveColumn,
   moveCardInSameColumn,
+  moveCardToDifferentColumn,
 }) {
   //
   const poiterSensor = useSensor(PointerSensor, {
@@ -80,7 +81,8 @@ function BoardContent({
     over,
     activeColumn,
     activeDraggingCardId,
-    activeDraggingCardData
+    activeDraggingCardData,
+    triggerFrom
   ) => {
     setOrderedState((prevColumn) => {
       // Tìm vị trí (index) của cái overCard trong column đích
@@ -150,6 +152,16 @@ function BoardContent({
       }
       // console.log("nextColumns", nextColumns);
       //Clone mảng
+
+      if (triggerFrom === 'handleDragEnd') {
+        moveCardToDifferentColumn(
+          activeDraggingCardId,
+          oldColumnWhenDraggingCard._id,
+          nextOverColumn._id,
+          nextColumns
+        );
+      }
+
       return nextColumns;
     });
   };
@@ -205,7 +217,8 @@ function BoardContent({
         over,
         activeColumn,
         activeDraggingCardId,
-        activeDraggingCardData
+        activeDraggingCardData,
+        "handleDragOver"
       );
     }
   };
@@ -242,7 +255,8 @@ function BoardContent({
           over,
           activeColumn,
           activeDraggingCardId,
-          activeDraggingCardData
+          activeDraggingCardData,
+          handleDragEnd
         );
       } else {
         //Hành động kéo card cùng 1 column
@@ -277,7 +291,11 @@ function BoardContent({
 
           return nextColumns;
         });
-        moveCardInSameColumn(dndOrderedCards,dndOrderedCardIds,oldColumnWhenDraggingCard._id);
+        moveCardInSameColumn(
+          dndOrderedCards,
+          dndOrderedCardIds,
+          oldColumnWhenDraggingCard._id
+        );
       }
     }
 
@@ -325,7 +343,7 @@ function BoardContent({
 
       //Tim cac diem giao nhau,va cham voi con tro
       const pointerIntersection = pointerWithin(args);
-      console.log("pointerIntersection", pointerIntersection);
+      // console.log("pointerIntersection", pointerIntersection);
 
       if (!pointerIntersection?.length) return;
       //Thuat toan phat hien va cham se tra ve 1 mang cac va cham o day
@@ -335,7 +353,7 @@ function BoardContent({
       //     : rectIntersection(args);
       //Tìm overId đầu tiên va chạm
       let overId = getFirstCollision(pointerIntersection, "id");
-      console.log("overId: ", overId);
+      // console.log("overId: ", overId);
       if (overId) {
         const checkColumn = orderedColumns.find(
           (column) => column._id === overId

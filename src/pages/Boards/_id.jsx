@@ -4,9 +4,8 @@ import AppBar from "~/components/AppBar/AppBar";
 import BoardBar from "./BoardBar/BoardBar";
 import BoardContent from "~/pages/Boards/BoardContent/BoardContent";
 import { mockData } from "~/apis/mock-data";
-import { mapOrder } from "~/utils/sorts";
 import Box from "@mui/material/Box";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 import { generatePlaceholderCard } from "~/utils/formaters";
 import { isEmpty } from "lodash";
 import {
@@ -15,6 +14,7 @@ import {
   createNewCardAPI,
   updateBoardDetailsAPI,
   updateColumndDetailsAPI,
+  moveCardToDifferentColumnAPI,
 } from "~/apis";
 function Board() {
   const boardId = "663f9ebffdefd53777168b0e";
@@ -26,7 +26,7 @@ function Board() {
         if (isEmpty(column.cards)) {
           column.cards = [generatePlaceholderCard(column)];
           column.cardOrderIds = [generatePlaceholderCard(column)._id];
-        } 
+        }
       });
       console.log("Full board", board);
       setBoard(board);
@@ -109,15 +109,40 @@ function Board() {
     }
     setBoard(newBoard);
 
-    updateColumndDetailsAPI(columnId,{cardOrderIds:dndOrderedCardIds})
+    updateColumndDetailsAPI(columnId, { cardOrderIds: dndOrderedCardIds });
   };
-  if (!board) {
-    return (
-      <Box sx={{ display: 'flex' }}>
-        <CircularProgress />
-      </Box>
-    );
-  }
+
+  const moveCardToDifferentColumn = (
+    currentCardId,
+    prevColumnId,
+    nextColumnId,
+    dndOrderedColumns
+  ) => {
+    console.log("currentCardId", currentCardId);
+    console.log("prevColumnId", prevColumnId);
+    console.log("nextColumnId", nextColumnId);
+    console.log("dndOrderedColumns", dndOrderedColumns);
+
+    //Id order sau khi cập nhật từ UI
+    const dndOrderedColumnsIds = dndOrderedColumns.map((c) => c._id);
+    //Cập nhật lại state board
+    const newBoard = {
+      ...board,
+    };
+    newBoard.columns = dndOrderedColumns;
+    newBoard.columnOrderIds = dndOrderedColumnsIds;
+    setBoard(newBoard);
+
+    //Gọi API
+    moveCardToDifferentColumnAPI({
+      currentCardId,
+      prevColumnId,
+      prevCardOrderIds: dndOrderedColumns.find((c) => c._id === prevColumnId)
+        ?.cardOrderIds,
+      nextCardOrderIds: dndOrderedColumns.find((c) => c._id === nextColumnId)
+        ?.cardOrderIds,
+    });
+  };
   return (
     <Container disableGutters maxWidth={false} sx={{ height: "100vh" }}>
       <AppBar />
@@ -128,6 +153,7 @@ function Board() {
         createNewCard={createNewCard}
         moveColumn={moveColumn}
         moveCardInSameColumn={moveCardInSameColumn}
+        moveCardToDifferentColumn={moveCardToDifferentColumn}
       />
     </Container>
   );

@@ -55,7 +55,6 @@ function Column({ column, createNewCard }) {
 
   const orderedCard = mapOrder(column?.cards, column?.cardOrderIds, "_id");
 
-  
   const [openNewCardForm, setOpenNewCardForm] = useState(false);
   const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm);
 
